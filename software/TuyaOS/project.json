@@ -1,0 +1,646 @@
+{
+    "output": {
+        "project_path": "E:/tuya/TLSR8250_TuyaOS-3.10.0/software/TuyaOS",
+        "path": "_output",
+        "kind": "apps",
+        "vendor": "tlsr825x_ble",
+        "fw": {
+            "name": "tuyaos_ble_file_demo",
+            "ver": "1.0.0"
+        },
+        "sdk": {
+            "libs": []
+        }
+    },
+    "app": {
+        "c_files": [
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/src/app_ble_file_demo.c",
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/src/app_dp_parser.c",
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/src/app_key.c",
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/src/app_led.c",
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/src/tuya_ble_protocol_callback.c",
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/src/tuya_sdk_callback.c"
+        ],
+        "h_dir": [
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo",
+            "$PROJECT_ROOT/apps/tuyaos_ble_file_demo/include"
+        ],
+        "l_files": []
+    },
+    "app_libs": {
+        "c_files": [],
+        "h_dir": [],
+        "l_files": []
+    },
+    "application_components": {},
+    "application_drivers": {},
+    "libs": {
+        "c_files": [],
+        "h_dir": [],
+        "l_files": [
+            "$PROJECT_ROOT/libs/libtal_ble_beacon_remoter.a",
+            "$PROJECT_ROOT/libs/libtal_ble_lightweight_mbedtls.a",
+            "$PROJECT_ROOT/libs/libtal_ble_mbedtls.a",
+            "$PROJECT_ROOT/libs/libtal_ble_secure.a",
+            "$PROJECT_ROOT/libs/libtal_xxtea.a"
+        ]
+    },
+    "components": {
+        "app_tuya_driver": {
+            "c_files": [
+                "$PROJECT_ROOT/components/app_tuya_driver/src/tal_adc.c",
+                "$PROJECT_ROOT/components/app_tuya_driver/src/tal_gpio.c",
+                "$PROJECT_ROOT/components/app_tuya_driver/src/tal_i2c.c",
+                "$PROJECT_ROOT/components/app_tuya_driver/src/tal_pwm.c",
+                "$PROJECT_ROOT/components/app_tuya_driver/src/tal_spi.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/app_tuya_driver/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_app_passthrough": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_app_passthrough/src/tal_ble_app_passthrough.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_app_passthrough/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_attach_ota": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_attach_ota/src/tuya_ble_attach_ota.c",
+                "$PROJECT_ROOT/components/tal_ble_attach_ota/src/tuya_ble_attach_ota_port.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_attach_ota/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_beacon": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_beacon/src/tal_ble_beacon.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_beacon/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_bulkdata": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_bulkdata/src/tuya_ble_bulkdata.c",
+                "$PROJECT_ROOT/components/tal_ble_bulkdata/src/tuya_ble_bulkdata_demo.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_bulkdata/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_file": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_file/src/tal_ble_file.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_file/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_iot_channel": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_iot_channel/src/tuya_ble_iot_channel.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_iot_channel/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_ota": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_ota/src/tuya_ble_ota.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_ota/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_product_test": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_product_test/src/tal_gpio_test.c",
+                "$PROJECT_ROOT/components/tal_ble_product_test/src/tuya_ble_product_test.c",
+                "$PROJECT_ROOT/components/tal_ble_product_test/src/tuya_ble_product_test_over_air.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_product_test/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_protocol": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_api.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_data_handler.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_event.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_event_handler.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_feature_accessory.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_gatt_send_queue.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_main.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_mem.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_mutli_tsf_protocol.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_port.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_queue.c",
+                "$PROJECT_ROOT/components/tal_ble_protocol/src/tuya_ble_storage.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_protocol/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_scene": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_scene/src/tuya_ble_scene.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_scene/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_uart_common": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_uart_common/src/tuya_ble_uart_common.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_uart_common/include"
+            ],
+            "l_files": []
+        },
+        "tal_ble_weather": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_ble_weather/src/tuya_ble_weather.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_ble_weather/include"
+            ],
+            "l_files": []
+        },
+        "tal_bluetooth": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_bluetooth/src/tal_bluetooth.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_bluetooth/include"
+            ],
+            "l_files": []
+        },
+        "tal_driver": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_driver/src/tal_flash.c",
+                "$PROJECT_ROOT/components/tal_driver/src/tal_rtc.c",
+                "$PROJECT_ROOT/components/tal_driver/src/tal_uart.c",
+                "$PROJECT_ROOT/components/tal_driver/src/tal_watchdog.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_driver/include"
+            ],
+            "l_files": []
+        },
+        "tal_feature_ext_module": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_feature_ext_module/src/tal_ble_x_demo.c",
+                "$PROJECT_ROOT/components/tal_feature_ext_module/src/tal_feature_ext_module.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_feature_ext_module/include"
+            ],
+            "l_files": []
+        },
+        "tal_key": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_key/src/tal_key.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_key/include"
+            ],
+            "l_files": []
+        },
+        "tal_local_timer": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_local_timer/src/tal_local_timer.c",
+                "$PROJECT_ROOT/components/tal_local_timer/src/tal_local_timer_storage.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_local_timer/include"
+            ],
+            "l_files": []
+        },
+        "tal_oled": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_oled/src/tal_oled.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_oled/include"
+            ],
+            "l_files": []
+        },
+        "tal_repeater": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_repeater/src/tal_repeater.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_repeater/include"
+            ],
+            "l_files": []
+        },
+        "tal_sdk_test": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_sdk_test/src/tal_sdk_test.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_sdk_test/include"
+            ],
+            "l_files": []
+        },
+        "tal_system": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_system/src/tal_log.c",
+                "$PROJECT_ROOT/components/tal_system/src/tal_memory.c",
+                "$PROJECT_ROOT/components/tal_system/src/tal_ota.c",
+                "$PROJECT_ROOT/components/tal_system/src/tal_sleep.c",
+                "$PROJECT_ROOT/components/tal_system/src/tal_sw_timer.c",
+                "$PROJECT_ROOT/components/tal_system/src/tal_system.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_system/include"
+            ],
+            "l_files": []
+        },
+        "tal_utc": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_utc/src/tal_utc.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_utc/include"
+            ],
+            "l_files": []
+        },
+        "tal_util": {
+            "c_files": [
+                "$PROJECT_ROOT/components/tal_util/src/tal_util.c"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/components/tal_util/include"
+            ],
+            "l_files": []
+        }
+    },
+    "include": {
+        "c_files": [],
+        "h_dir": [
+            "$PROJECT_ROOT/include/base/include",
+            "$PROJECT_ROOT/include/components/tal_ble_beacon_remoter/include",
+            "$PROJECT_ROOT/include/components/tal_ble_lightweight_mbedtls/include",
+            "$PROJECT_ROOT/include/components/tal_ble_mbedtls/include",
+            "$PROJECT_ROOT/include/components/tal_ble_secure/include",
+            "$PROJECT_ROOT/include/components/tal_xxtea/include",
+            "$PROJECT_ROOT/include/vendor/adapter/adc/include",
+            "$PROJECT_ROOT/include/vendor/adapter/bluetooth/include",
+            "$PROJECT_ROOT/include/vendor/adapter/flash/include",
+            "$PROJECT_ROOT/include/vendor/adapter/gpio/include",
+            "$PROJECT_ROOT/include/vendor/adapter/hci/include",
+            "$PROJECT_ROOT/include/vendor/adapter/i2c/include",
+            "$PROJECT_ROOT/include/vendor/adapter/pwm/include",
+            "$PROJECT_ROOT/include/vendor/adapter/rtc/include",
+            "$PROJECT_ROOT/include/vendor/adapter/security/include",
+            "$PROJECT_ROOT/include/vendor/adapter/spi/include",
+            "$PROJECT_ROOT/include/vendor/adapter/system/include",
+            "$PROJECT_ROOT/include/vendor/adapter/timer/include",
+            "$PROJECT_ROOT/include/vendor/adapter/uart/include",
+            "$PROJECT_ROOT/include/vendor/adapter/utilities/include",
+            "$PROJECT_ROOT/include/vendor/adapter/wakeup/include",
+            "$PROJECT_ROOT/include/vendor/adapter/watchdog/include"
+        ],
+        "l_files": []
+    },
+    "adapter": {
+        "c_files": [],
+        "h_dir": [],
+        "l_files": []
+    },
+    "tkl": {
+        "drivers": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_adc.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_flash.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_gpio.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_i2c.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_pwm.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_rtc.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_spi.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_timer.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_uart.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_watchdog.c"
+            ],
+            "h_dir": [],
+            "l_files": []
+        },
+        "system": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_board.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_memory.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_ota.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_sleep.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_sw_timer.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_system.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_wakeup.c"
+            ],
+            "h_dir": [],
+            "l_files": []
+        },
+        "utilities": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/utilities/tuya_list.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/utilities/tuya_mem_heap.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/utilities/tuya_queue.c"
+            ],
+            "h_dir": [],
+            "l_files": []
+        },
+        "bluetooth": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/bluetooth/tkl_bluetooth.c"
+            ],
+            "h_dir": [],
+            "l_files": []
+        },
+        "security": {
+            "c_files": [],
+            "h_dir": [],
+            "l_files": []
+        },
+        "include": {
+            "c_files": [],
+            "h_dir": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/include"
+            ],
+            "l_files": []
+        },
+        "zigbee": {
+            "c_files": [],
+            "h_dir": [],
+            "l_files": []
+        }
+    },
+    "vendor": {
+        "sdk": {
+            "s_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/div_mod.S"
+            ],
+            "h_dir": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk"
+            ],
+            "application": {
+                "app": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/app/usbaud.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/app/usbcdc.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/app/usbkb.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/app/usbmouse.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/app"
+                    ]
+                },
+                "audio": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/audio/adpcm.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/audio/tl_audio.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/audio"
+                    ]
+                },
+                "keyboard": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/keyboard/keyboard.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/keyboard"
+                    ]
+                },
+                "print": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/print/putchar.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/print/u_printf.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/print"
+                    ]
+                },
+                "usbstd": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/usbstd/usb.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/usbstd/usbdesc.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/usbstd/usbhw.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application/usbstd"
+                    ]
+                },
+                "h_dir": [
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/application"
+                ]
+            },
+            "boot": {
+                "8258": {
+                    "s_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/boot/8258/cstartup_8258_RET_32K.S"
+                    ]
+                }
+            },
+            "drivers": {
+                "8258": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid1060c8.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid1360c8.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid1360eb.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid1460c8.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid011460c8.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid13325e.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid14325e.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid134051.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash/flash_mid136085.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/adc.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/aes.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/analog.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/audio.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/bsp.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/clock.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/emi.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/gpio_8258.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/i2c.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/lpc.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/qdec.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/rf_pa.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/s7816.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/spi.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/timer.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/uart.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/watchdog.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/drivers/8258/flash"
+                    ]
+                }
+            },
+            "common": {
+                "c_files": [
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common/breakpoint.c",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common/log.c",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common/tc32.c",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common/selection_sort.c",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common/string.c",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common/utility.c"
+                ],
+                "h_dir": [
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/common",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/config"
+                ]
+            },
+            "proj_lib": {
+                "c_files": [],
+                "h_dir": [
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib"
+                ],
+                "l_files": [
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib/libfirmware_encrypt.a",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib/liblt_8258.a",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib/libsoft-fp.a"
+                ]
+            },
+            "stack": {
+                "h_dir": [
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/attr",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/bqb",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/crypt",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/gap",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/hci",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/l2cap",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/ll",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/llms",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/phy",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/service",
+                    "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/stack/ble/smp"
+                ]
+            },
+            "vendor": {
+                "8258_module": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/8258_module/app.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/8258_module/app_att.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/8258_module/battery_check.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/8258_module/main.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/8258_module"
+                    ]
+                },
+                "common": {
+                    "c_files": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/common/blt_common.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/common/blt_fw_sign.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/common/blt_led.c",
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/common/blt_soft_timer.c"
+                    ],
+                    "h_dir": [
+                        "$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/vendor/common"
+                    ]
+                }
+            }
+        }
+    },
+    "tuyaos": {
+        "bluetooth": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/bluetooth/tkl_bluetooth.c"
+            ],
+            "h_dir": []
+        },
+        "drivers": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_adc.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_flash.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_gpio.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_i2c.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_pwm.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_rtc.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_spi.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_uart.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_timer.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/drivers/tkl_watchdog.c"
+            ],
+            "h_dir": []
+        },
+        "include": {
+            "c_files": [],
+            "h_dir": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/include"
+            ]
+        },
+        "system": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_memory.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_ota.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_sleep.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_system.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_board.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_sw_timer.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/system/tkl_wakeup.c"
+            ],
+            "h_dir": []
+        },
+        "utilities": {
+            "c_files": [
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/utilities/tuya_list.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/utilities/tuya_mem_heap.c",
+                "$PROJECT_ROOT/vendor/tlsr825x_ble/tuyaos/utilities/tuya_queue.c"
+            ],
+            "h_dir": []
+        }
+    },
+    "tool": {
+        "gcc": {
+            "toolchain": {
+                "bin_path": "$PROJECT_ROOT/vendor/tlsr825x_ble/toolchain/software/tc32/bin"
+            },
+            "cmd": {
+                "gcc": {
+                    "cc": "tc32-elf-gcc",
+                    "asm": "tc32-elf-gcc",
+                    "c_flags": "-ffunction-sections -fdata-sections -Wall -O2 -fpack-struct -fshort-enums -finline-small-functions -std=gnu99 -fshort-wchar -fms-extensions",
+                    "s_flags": "-Xassembler$PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk -DMCU_STARTUP_8258_RET_32K -D__PROJECT_MESH__=1 -DCHIP_TYPE=CHIP_TYPE_8258",
+                    "c_macros": "-DCHIP_TYPE=CHIP_TYPE_8258 -D__TUYA_PROJECT__=1 -DTLSR825X_SYS -D__PROJECT_MESH__=1 -DCUSTOMIZED_TUYA_BLE_CONFIG_FILE=\"<custom_tuya_ble_config.h>\""
+                },
+                "ld": "tc32-elf-ld --gc-sections -T $PROJECT_ROOT/vendor/tlsr825x_ble/sdk/telink_sdk/boot/boot.link $O_FILES $LIB_DIRS \"-(\" $LIBS \"-)\" -o $ELF",
+                "objcopy": "tc32-elf-objcopy -O binary $ELF $OUTPUT/output.bin",
+                "objdump": "tc32-elf-objdump -x -D -l -S $ELF > $LST",
+                "size": "tc32-elf-size -t $ELF",
+                "ar": "tc32-elf-ar",
+                "before-build": [],
+                "after-build": []
+            },
+            "output": {
+                "UG": "output.bin",
+                "UA": "output.bin",
+                "QIO": "output.bin",
+                "PROD": "output.bin"
+            },
+            "flash": {
+                "bin_path": "./vendor/tlsr825x_ble/toolchain/software/tc32/tools",
+                "flash_user_cmd": "tcdb rst & tcdb -i $UA -b & tcdb wc 6f 20",
+                "flash_all_cmd": "tcdb rst & tcdb wf 0 -s 512k -e & tcdb -i $PROD -b & tcdb wc 6f 20"
+            }
+        }
+    }
+}

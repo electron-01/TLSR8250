@@ -1,0 +1,14 @@
+{
+    "$OUTPUT": ".log",
+    "$O_FILES": "",
+    "$L_FILES": "./libs/libtal_ble_beacon_remoter.a ./libs/libtal_ble_lightweight_mbedtls.a ./libs/libtal_ble_mbedtls.a ./libs/libtal_ble_secure.a ./libs/libtal_xxtea.a ./vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib/libfirmware_encrypt.a ./vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib/liblt_8258.a ./vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib/libsoft-fp.a",
+    "$LIB_DIRS": " -L./libs -L./vendor/tlsr825x_ble/sdk/telink_sdk/proj_lib",
+    "$LIBS": " -ltal_ble_beacon_remoter -ltal_ble_lightweight_mbedtls -ltal_ble_mbedtls -ltal_ble_secure -ltal_xxtea -lfirmware_encrypt -llt_8258 -lsoft-fp",
+    "$MAP": ".log/output.map",
+    "$ELF": ".log/output.elf",
+    "$LST": ".log/output.lst",
+    "$PYTHON": "C:\\Users\\USER\\.espressif\\tools\\idf-python\\3.8.7\\python.exe",
+    "$KEIL_PATH": "",
+    "$UA": "_output/tuyaos_ble_file_demo_UA_1.0.0.bin",
+    "$PROD": "_output/tuyaos_ble_file_demo_PROD_1.0.0.bin"
+}

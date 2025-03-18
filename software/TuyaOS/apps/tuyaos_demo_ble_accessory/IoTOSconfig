@@ -1,0 +1,32 @@
+# Ktuyaconf
+config ENABLE_LOG
+    bool "ENABLE_LOG"
+    default y
+
+config BOARD_ENABLE_LOG
+    bool "BOARD_ENABLE_LOG"
+    default y
+
+config TUYA_SDK_TEST
+    bool "TUYA_SDK_TEST"
+    default y
+
+config BOARD_HEAP_SIZE
+    int "BOARD_HEAP_SIZE"
+    default 5120
+    
+config TUYA_SDK_DEBUG_MODE
+    int "TUYA_SDK_DEBUG_MODE"
+    default 0
+
+config TUYA_BLE_ACCESSORY_MOUNT_SUPPORTED
+    bool "TUYA_BLE_ACCESSORY_MOUNT_SUPPORTED"
+    default y
+
+config TUYA_BLE_MUTI_DATA_SOURCE_SUPPORTED
+    bool "TUYA_BLE_MUTI_DATA_SOURCE_SUPPORTED"
+    default y
+
+config TUYA_BLE_FEATURE_UART_COMMON_ENABLE
+    bool "TUYA_BLE_FEATURE_UART_COMMON_ENABLE"
+    default y

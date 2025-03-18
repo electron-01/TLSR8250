@@ -1,0 +1,52 @@
+# Ktuyaconf
+
+config ENABLE_LOG
+    bool "ENABLE_LOG"
+    default y
+
+config BOARD_ENABLE_LOG
+    bool "BOARD_ENABLE_LOG"
+    default y
+
+config TUYA_SDK_TEST
+    bool "TUYA_SDK_TEST"
+    default y
+
+config BOARD_HEAP_SIZE
+    int "BOARD_HEAP_SIZE"
+    default 5120
+
+config TUYA_SDK_DEBUG_MODE
+    int "TUYA_SDK_DEBUG_MODE"
+    default 0
+
+config ENABLE_KEY
+    bool "ENABLE_KEY"
+    default y
+
+config ENABLE_LED
+    bool "ENABLE_LED"
+    default y
+
+config ENABLE_BATTERY
+    bool "ENABLE_BATTERY"
+    default y
+
+config ENABLE_BEACON_REPORT
+    bool "ENABLE_BEACON_REPORT"
+    default y
+
+config TAL_BLE_BEACON_INCLUDE_DP_DATA
+    bool "TAL_BLE_BEACON_INCLUDE_DP_DATA"
+    depends on ENABLE_BEACON_REPORT
+    default y
+
+config ENABLE_HISTORY_DATA
+    bool "ENABLE_HISTORY_DATA"
+    default y
+
+config TUYA_BLE_FEATURE_BULKDATA_ENABLE
+    bool "TUYA_BLE_FEATURE_BULKDATA_ENABLE"
+    depends on ENABLE_HISTORY_DATA
+    default y
+

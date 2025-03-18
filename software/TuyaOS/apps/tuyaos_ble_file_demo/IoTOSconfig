@@ -1,0 +1,46 @@
+# Ktuyaconf
+menu "System Setting"
+    config ENABLE_LOG
+        bool "ENABLE_LOG"
+        default y
+
+    config BOARD_ENABLE_LOG
+        bool "BOARD_ENABLE_LOG"
+        default y
+
+    config TUYA_SDK_TEST
+        bool "TUYA_SDK_TEST"
+        default y
+
+    config BOARD_HEAP_SIZE
+        int "BOARD_HEAP_SIZE"
+        default 5120
+endmenu
+
+menu "File Setting"
+    config TUYA_BLE_FILE_ENABLE
+        bool "TUYA_BLE_FILE_ENABLE"
+        default y
+
+    if TUYA_BLE_FILE_ENABLE
+        config FILE_STORAGE_AREA
+            int "file data storage in where (0 - mcu, 1 - > external enclosure )"
+            default 1
+        config BOARD_FLASH_FILE_INFO_ADDR
+            hex "BOARD_FLASH_FILE_INFO_ADDR"
+            default 0x78000
+        config BOARD_FLASH_FILE_MD5_INFO_ADDR
+            hex "BOARD_FLASH_FILE_MD5_INFO_ADDR"
+            default 0x79000
+        config BOARD_FLASH_FILE_INFO_BACKUP_ADDR
+            hex "BOARD_FLASH_FILE_INFO_BACKUP_ADDR"
+            default 0x7A000
+        config BOARD_FLASH_FILE_START_ADDR
+            hex "BOARD_FLASH_FILE_START_ADDR"
+            default 0x7B000
+        config BOARD_FLASH_FILE_END_ADDR
+            hex "BOARD_FLASH_FILE_END_ADDR"
+            default 0x80000
+    endif
+endmenu
+

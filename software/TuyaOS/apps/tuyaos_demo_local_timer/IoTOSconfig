@@ -1,0 +1,22 @@
+# Ktuyaconf
+
+config ENABLE_LOG
+    bool "ENABLE_LOG"
+    default y
+
+config BOARD_ENABLE_LOG
+    bool "BOARD_ENABLE_LOG"
+    default y
+
+config TUYA_SDK_TEST
+    bool "TUYA_SDK_TEST"
+    default y
+
+config TUYA_SDK_DEBUG_MODE
+    int "TUYA_SDK_DEBUG_MODE"
+    default 0
+
+config TUYA_BLE_FEATURE_LOCAL_TIMER_ENABLE
+    int "TUYA_BLE_FEATURE_LOCAL_TIMER_ENABLE"
+    default 1
+

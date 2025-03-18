@@ -1,0 +1,24 @@
+.log/app_product_test.o: \
+ apps/tuyaos_demo_ble_peripheral/src/app_product_test.c \
+ components/tal_system/include/tal_log.h \
+ include/vendor/adapter/utilities/include/tuya_cloud_types.h \
+ include/base/include/tuya_iot_config.h \
+ apps/tuyaos_demo_ble_peripheral/app_config.h \
+ vendor/tlsr825x_ble/sdk/telink_sdk/common/stdint.h \
+ vendor/tlsr825x_ble/sdk/telink_sdk/common/string.h \
+ include/base/include/tuya_error_code.h \
+ components/tal_system/include/tal_sw_timer.h \
+ components/tal_sdk_test/include/tal_sdk_test.h \
+ components/tal_ble_protocol/include/tuya_ble_type.h \
+ components/tal_bluetooth/include/tal_bluetooth_def.h \
+ components/tal_utc/include/tal_utc.h \
+ components/tal_ble_product_test/include/tuya_ble_product_test.h \
+ components/tal_ble_protocol/include/tuya_ble_internal_config.h \
+ components/tal_ble_protocol/include/tuya_ble_config.h \
+ components/tal_ble_protocol/include/custom_tuya_ble_config.h \
+ components/tal_ble_protocol/include/tuya_ble_type.h \
+ vendor/tlsr825x_ble/tuyaos/include/board.h \
+ components/tal_ble_protocol/include/tuya_ble_port.h \
+ include/vendor/adapter/system/include/tkl_system.h \
+ include/components/tal_ble_mbedtls/include/tal_ble_md5.h \
+ components/tal_ble_ota/include/tuya_ble_ota.h

@@ -1,0 +1,10 @@
+.log/tal_sw_timer.o: components/tal_system/src/tal_sw_timer.c \
+ include/vendor/adapter/system/include/tkl_memory.h \
+ include/vendor/adapter/utilities/include/tuya_cloud_types.h \
+ include/base/include/tuya_iot_config.h \
+ apps/tuyaos_ble_file_demo/app_config.h \
+ vendor/tlsr825x_ble/sdk/telink_sdk/common/stdint.h \
+ vendor/tlsr825x_ble/sdk/telink_sdk/common/string.h \
+ include/base/include/tuya_error_code.h \
+ include/vendor/adapter/system/include/tkl_system.h \
+ components/tal_system/include/tal_sw_timer.h

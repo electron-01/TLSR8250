@@ -1,0 +1,38 @@
+# Ktuyaconf
+
+config ENABLE_LOG
+    bool "ENABLE_LOG"
+    default y
+
+config BOARD_ENABLE_LOG
+    bool "BOARD_ENABLE_LOG"
+    default y
+
+config TUYA_SDK_TEST
+    bool "TUYA_SDK_TEST"
+    default y
+
+config TUYA_SDK_DEBUG_MODE
+    int "TUYA_SDK_DEBUG_MODE"
+    default 0
+
+config TAL_BLE_BEACON_INCLUDE_DP_DATA
+    bool "TAL_BLE_BEACON_INCLUDE_DP_DATA"
+    default y
+
+config TAL_BLE_BEACON_ROAMING_FLAG
+    bool "TAL_BLE_BEACON_ROAMING_FLAG"
+    default y
+
+config TUYA_BLE_BEACON_KEY_ENABLE
+    bool "TUYA_BLE_BEACON_KEY_ENABLE"
+    default y
+
+config TUYA_BLE_PROD_SUPPORT_OEM_TYPE
+    int "TUYA_BLE_PROD_SUPPORT_OEM_TYPE"
+    default 0
+
+config TUYA_BLE_FEATURE_ATTACH_OTA_ENABLE
+    int "TUYA_BLE_FEATURE_ATTACH_OTA_ENABLE"
+    default 0
+

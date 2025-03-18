@@ -1,0 +1,9 @@
+mainmenu "Tuya IoT Configuration"
+
+menu "APP"
+	rsource	../apps/tuyaos_demo_ble_peripheral/IoTOSconfig
+endmenu
+
+menu "COMP"
+endmenu
+

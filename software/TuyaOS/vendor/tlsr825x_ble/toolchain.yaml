@@ -1,0 +1,11 @@
+version: 2
+sources:
+- https://registry.code.tuya-inc.top/embed_ci_space_group/embed_repo_space.git
+info:
+  name: tlsr825x_ble
+  version: 0.0.13
+  proj_id: 70770
+  brc_id: 100138
+  repo: https://registry.code.tuya-inc.top/embtuyaosimport/nonos-kernel/ble/tlsr825x_ble
+dependencies:
+  components: []

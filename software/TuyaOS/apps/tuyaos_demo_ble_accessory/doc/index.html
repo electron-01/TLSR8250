@@ -1,0 +1,661 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>TuyaOS BLE Developer Guide</title>
+  <link rel="stylesheet" href="https://images.tuyacn.com/smart/embed/package/vscode/tool-claat/js/codelab-elements.css">
+  <link rel="stylesheet" href="https://images.tuyacn.com/smart/embed/package/vscode/tool-claat/js/quickstart.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="tuyaos_ble_developer_guide"
+                  title="TuyaOS BLE Developer Guide"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="概述" duration="0">
+        <p>完成一件事情需要有限个步骤，嵌入式开发也不例外。</p>
+<p>我们需要完成的事情是：基于 BLE 技术，将设备接入涂鸦 IoT 平台。</p>
+<p class="image-container"><img alt="image-20220406171632450" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220406171632450.png"></p>
+<p><strong>设备</strong>：由开发者提供，涂鸦提供教程（本文档及文中提及的其他文档）</p>
+<p><strong>BLE</strong>：Bluetooth Low Energy，低功耗蓝牙</p>
+<p><strong>涂鸦智能 App</strong>：由涂鸦提供，开发者可在 App Store 搜索安装</p>
+<p><strong>网络</strong>：公共网络</p>
+<p><strong>涂鸦 IoT 平台</strong>：由涂鸦提供，访问地址：https://iot.tuya.com/</p>
+<p>根据上图可知：设备可以通过 BLE 接入涂鸦智能 App，涂鸦智能 App 通过网络连接涂鸦 IoT 平台，即实现了设备接入涂鸦 IoT 平台的目标。</p>
+<p>因为涂鸦智能 App 和涂鸦 IoT 平台都是由涂鸦提供的，所以作为开发者，接下来的重点内容就是完成设备的嵌入式开发。</p>
+<p>完成设备的嵌入式开发这件事情可以分解为有限个步骤：</p>
+<p>（1）理解概念</p>
+<p>（2）搭建环境</p>
+<p>（3）开发软件</p>
+<p>（4）烧录固件</p>
+<p>（5）授权</p>
+<p>（6）测试</p>
+<p>（7）OTA</p>
+<p>考虑到设备使用的 BLE 芯片各不相同，搭建环境和烧录固件等芯片相关的部分内容会在《TuyaOS_BLE_Platform_xxxx》文档中进行介绍。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="理解概念" duration="0">
+        <p>为了开发工作的顺利进行，对一些常见的概念进行说明，更多说明见 <a href="https://developer.tuya.com/cn/docs/iot/terms?id=K914joq6tegj4" target="_blank">名词解释</a>。</p>
+<h2 is-upgraded>蓝牙配网</h2>
+<p>考虑到兼容性和安全性，涂鸦设计并开发了一整套 涂鸦 BLE 配网协议，相关概念介绍如下。</p>
+<h3 is-upgraded>角色</h3>
+<p>主机：涂鸦智能APP（手机）、蓝牙网关</p>
+<p>从机：涂鸦智能设备（蓝牙单点：门锁、灯、防丢器，体脂称、手环......）</p>
+<p>主机通过 <strong>蓝牙广播</strong> 识别从机，并对已授权的从机发起配对请求，完成配对的主从机处于 **绑定状态 ** 。处于绑定状态的主从机之间存在一条符合蓝牙规范的安全通道，所有的业务类通信（包括DP数据）都在该安全通道中进行。日常交流中，主机多称为手机 / App，从机多称为设备。</p>
+<h3 is-upgraded>配网</h3>
+<p>安全通道的建立过程（配网）可以简述如下：<strong>未绑定 &gt; 连接 &gt; 配对 &gt; 绑定 &gt; 安全通信</strong> &gt; 断开 &gt; 重连 &gt; 绑定 &gt; 安全通信 &gt; ...... &gt; <strong>解配对 &gt; 未绑定</strong></p>
+<ul>
+<li>连接：表示蓝牙设备链路层的状态为连接状态。</li>
+<li>配对：视为一种过程，一系列的密钥交换过程。</li>
+<li>绑定：视为一种状态，配对完成的状态称之为&#34;绑定状态&#34;，处于绑定状态的两个设备可以进行安全通信。</li>
+<li>重连：视为一种过程，依然是一系列的密钥交换过程，可以认为是简化的&#34;配对&#34; ，该过程的前提是此前已经进入过一次绑定状态。</li>
+<li>解配对：视为一种过程，秘钥删除和绑定状态等信息的清除，也称作&#34;移除&#34;、&#34;解绑&#34;。</li>
+</ul>
+<h3 is-upgraded>解绑</h3>
+<p>解绑</p>
+<ul>
+<li>触发条件：手机面板上点击&#34;解除绑定&#34;按钮</li>
+<li>触发事件：TUYA_BLE_CB_EVT_UNBOUND</li>
+</ul>
+<p>解绑并清除数据</p>
+<ul>
+<li>触发条件：手机面板上点击&#34;解绑并清除数据&#34;按钮</li>
+<li>触发事件：TUYA_BLE_CB_EVT_DEVICE_RESET</li>
+</ul>
+<p>异常解绑</p>
+<ul>
+<li><a target="_blank">触发条件</a>：手机面板上点击&#34;解除绑定&#34;按钮</li>
+<li>触发事件：TUYA_BLE_CB_EVT_ANOMALY_UNBOUND</li>
+</ul>
+<h3 is-upgraded>异常解绑</h3>
+<p>异常解绑又称作<strong>离线移除</strong>。</p>
+<p>指的是涂鸦智能 App 在未连接蓝牙设备的情况下，在面板上对该设备进行&#34;解除绑定/解绑并清除数据&#34;，操作成功并同步至云端，此时设备端还处于绑定状态。</p>
+<p>此后，设备进行蓝牙广播（绑定状态），如果任一涂鸦智能 App 扫描到该设备，发现其广播是绑定状态但是该设备在云端的状态为未绑定状态，则会主动对其进行蓝牙连接，连接成功后发送异常解绑指令（该过程APP界面无任何变化），此时蓝牙设备就能收到异常解绑事件，并进行异常解绑操作。</p>
+<h3 is-upgraded>相关文档</h3>
+<p>《Tuya BLE Communication Protocol》</p>
+<p>获取方式：搜索企业微信群&#34;蓝牙通信协议同步&#34;可获取最新版本，若不在群内请联系高永会获取。</p>
+<h3 is-upgraded>其他名词</h3>
+<table>
+<tr><td colspan="1" rowspan="1"><p><strong>名词</strong></p>
+</td><td colspan="1" rowspan="1"><p><strong>说明</strong></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>MAC</p>
+</td><td colspan="1" rowspan="1"><p>MAC地址一般采用6字节（48比特），48比特都有其规定的意义，前24位是由生产网卡的厂商向IEEE申请的厂商地址，目前的价格是1000美元买一个地址块，后24位由厂商自行分配，这样的分配使得世界上任意一个拥有48位MAC 地址的网卡都有唯一的标识。所以要求客供MAC的客户要有自己购买的MAC地址块。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>UUID</p>
+</td><td colspan="1" rowspan="1"><p>UUID是设备入涂鸦云的授权凭证。模组订单生成时，便在Tuya云根据模组订单信息生成授权码（包含需要烧录的固件信息、UUID等），在模组烧录授权过程，上位机工具录入授权码，在&#34;授权&#34;环节，将UUID与模组MAC地址进行绑定，保证一机一码。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Device  ID</p>
+</td><td colspan="1" rowspan="1"><p>Device ID也叫设备ID、虚拟ID等，是设备配网激活时，根据设备UUID在云端随机生成的设备凭证。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>蓝牙绑定</p>
+</td><td colspan="1" rowspan="1"><p>蓝牙绑定是指蓝牙设备通过 Tuya BLE Communication Protocol 与 App 经过一系列秘钥交换、鉴权建立起的一种设备与APP账号的绑定关系，以及表示设备在云端的绑定状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>蓝牙解绑</p>
+</td><td colspan="1" rowspan="1"><p>蓝牙解绑是指设备解除与 App  账号的绑定关系，进入未绑定未连接状态。设备存储的相关秘钥、绑定状态等信息也会被清除。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>蓝牙重置</p>
+</td><td colspan="1" rowspan="1"><p>蓝牙重置是指在 App  上操作解绑并清除数据，与蓝牙解绑的区别在于用户数据是否清除。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>蓝牙连接</p>
+</td><td colspan="1" rowspan="1"><p>蓝牙连接仅表示蓝牙设备链路层的状态为连接状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>蓝牙广播</p>
+</td><td colspan="1" rowspan="1"><p>蓝牙广播仅表示蓝牙设备链路层的状态为广播状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>蓝牙配网状态</p>
+</td><td colspan="1" rowspan="1"><p>该名词中的 <strong>配网</strong> 不同于 Wi-Fi 设备配路由器的过程，指的是未绑定未连接的蓝牙设备处于广播状态的一种状态，此时 App  可通过广播发现设备。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>未绑定未连接</p>
+</td><td colspan="1" rowspan="1"><p>表示设备当前既未注册到涂鸦云，也没有处于蓝牙连接状态。若当前设备还处于蓝牙广播状态，设备处于可配网状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>未绑定已连接</p>
+</td><td colspan="1" rowspan="1"><p>表示未绑定的设备处于蓝牙连接状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>绑定未连接</p>
+</td><td colspan="1" rowspan="1"><p>通常也叫设备 <strong>离线</strong>，表示设备与 App 账号建立了绑定关系，但链路层未连接，不处于安全通讯状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>绑定已连接</p>
+</td><td colspan="1" rowspan="1"><p>通常也叫设备 <strong>上线</strong>，蓝牙绑定已连接是指蓝牙设备通过 <strong>涂鸦蓝牙通讯协议</strong> 与 App 建立的安全通讯状态。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>绑定未鉴权已连接</p>
+</td><td colspan="1" rowspan="1"><p>这个状态是配对或重连中的一个中间状态，通常表示已绑定的设备刚刚建立蓝牙连接。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>未绑定未鉴权已连接</p>
+</td><td colspan="1" rowspan="1"><p>与未绑定未连接的区别是该状态表示已处于蓝牙连接状态，暂时不可被发现。</p>
+</td></tr>
+</table>
+<h2 is-upgraded>产品</h2>
+<p><a href="https://developer.tuya.com/cn/docs/iot/development-overview?id=Ka3redtxl6g4k#title-0-%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%A7%E5%93%81%EF%BC%9F" target="_blank">产品的定义</a></p>
+<p><a href="https://developer.tuya.com/cn/docs/iot/create-product?id=K914jp1ijtsfe" target="_blank">创建产品的流程</a></p>
+<h3 is-upgraded>PID</h3>
+<p>PID，Product ID，产品 ID，描述一类产品功能（DP）的集合。</p>
+<p>在 <a href="https://iot.tuya.com/" target="_blank">涂鸦 IoT 平台</a> 创建的每一个产品都会产生一个唯一的产品编号，关联了产品具体的功能点、App 控制面板、出货信息等所有跟这个产品相关的信息。</p>
+<h4 is-upgraded>测试用 PID</h4>
+<p>3aubjk7p</p>
+<p>该 PID 作为 nRF52832 芯片平台用于测试的 PID，开发者可以按照创建产品的流程创建新的 PID，也可以直接 <a href="https://pbt.tuya.com/s?p=3125bbb8af3aff3ef4f5ce928e5a8425&u=60e9cf653473f084aa6b01a8820f5ddd&t=1" target="_blank">复制该 PID</a> （在新的 IoT 平台账号上创建相同功能的 PID）。</p>
+<p>注意：复制的 PID 仅用于测试/调试，不可用作生产。</p>
+<h4 is-upgraded>PID 3aubjk7p 绑定的固件Key</h4>
+<p>key7ccsa</p>
+<p>固件最新版本：一般来说，版本说明为 <strong>OTA测试专用</strong> 的版本为最新版本的 OTA 测试固件，所以最新版本为其下面的第一个固件，例如，下图最新版本为V4.0。</p>
+<p class="image-container"><img alt="image-20211229165043767" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229165043767.png"></p>
+<h4 is-upgraded>PID 3aubjk7p 的绑定模式</h4>
+<p>弱绑定</p>
+<h3 is-upgraded>DP点</h3>
+<p>DP，Data Point，数据点，又称为 DP 点或功能点，表示设备所具备的功能集合。</p>
+<p><strong>DP数据格式：</strong></p>
+<table>
+<tr><td colspan="1" rowspan="1"><p><strong>字段</strong></p>
+</td><td colspan="1" rowspan="1"><p><strong>长度（byte）</strong></p>
+</td><td colspan="1" rowspan="1"><p><strong>说明</strong></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>dp_id</p>
+</td><td colspan="1" rowspan="1"><p>1</p>
+</td><td colspan="1" rowspan="1"><p>DP点的指令码</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>dp_type</p>
+</td><td colspan="1" rowspan="1"><p>1</p>
+</td><td colspan="1" rowspan="1"><p>DP点的数据类型</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>dp_data_len</p>
+</td><td colspan="1" rowspan="1"><p>2</p>
+</td><td colspan="1" rowspan="1"><p>DP点的数据长度</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>dp_data_value</p>
+</td><td colspan="1" rowspan="1"><p>dp_data_len</p>
+</td><td colspan="1" rowspan="1"><p>DP点的数据</p>
+</td></tr>
+</table>
+<p><strong>dp_type的取值范围及含义（云端定义）如下：</strong></p>
+<table>
+<tr><td colspan="1" rowspan="1"><p><strong>dp_type</strong></p>
+</td><td colspan="1" rowspan="1"><p><strong>取值</strong></p>
+</td><td colspan="1" rowspan="1"><p><strong>长度（byte）</strong></p>
+</td><td colspan="1" rowspan="1"><p><strong>说明</strong></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>raw</p>
+</td><td colspan="1" rowspan="1"><p>0</p>
+</td><td colspan="1" rowspan="1"><p>1~N</p>
+</td><td colspan="1" rowspan="1"><p>透传型</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>bool</p>
+</td><td colspan="1" rowspan="1"><p>1</p>
+</td><td colspan="1" rowspan="1"><p>1</p>
+</td><td colspan="1" rowspan="1"><p>布尔型</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>value</p>
+</td><td colspan="1" rowspan="1"><p>2</p>
+</td><td colspan="1" rowspan="1"><p>4</p>
+</td><td colspan="1" rowspan="1"><p>数值型</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>string</p>
+</td><td colspan="1" rowspan="1"><p>3</p>
+</td><td colspan="1" rowspan="1"><p>0~255</p>
+</td><td colspan="1" rowspan="1"><p>字符型</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>enum</p>
+</td><td colspan="1" rowspan="1"><p>4</p>
+</td><td colspan="1" rowspan="1"><p>1</p>
+</td><td colspan="1" rowspan="1"><p>枚举型</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>bitmap</p>
+</td><td colspan="1" rowspan="1"><p>5</p>
+</td><td colspan="1" rowspan="1"><p>4</p>
+</td><td colspan="1" rowspan="1"><p>故障型</p>
+</td></tr>
+</table>
+<h4 is-upgraded>PID 3aubjk7p 的 DP 点</h4>
+<p class="image-container"><img alt="image-20211229162859864" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229162859864.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="搭建环境" duration="0">
+        <h2 is-upgraded>搭建硬件环境</h2>
+<p>硬件环境跟芯片平台完全相关，请参阅《TuyaOS_BLE_Platform_xxxx》文档</p>
+<h2 is-upgraded>搭建软件环境</h2>
+<p>部分软件环境跟芯片平台无关，在该文档中统一介绍，其他软件环境跟芯片平台相关，请参阅《TuyaOS_BLE_Platform_xxxx》文档</p>
+<h3 is-upgraded><a href="https://developer.tuya.com/cn/docs/iot-device-dev/tuyaos-wind-ide?id=Kbfy6kfuuqqu3" target="_blank">Tuya Wind IDE</a></h3>
+<p>安装Python</p>
+<p>前往 <a href="https://www.python.org/downloads/" target="_blank">Python 官网</a> 下载 3.6~3.8 的版本进行默认安装。</p>
+<p>注意：windows 下安装完 python 后在安装路径下默认是 python.exe，需要复制一份并重命名为 python3.exe（如果 python3.exe 已存在请忽略该步骤）。</p>
+<p class="image-container"><img alt="image-20211229171340283" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229171340283.png"></p>
+<p>验证</p>
+<p class="image-container"><img alt="image-20211229171351181" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229171351181.png"></p>
+<p>前往 <a href="https://code.visualstudio.com/download" target="_blank">Vscode 官网</a> 下载最新的版本，并进行安装。</p>
+<p>非常建议安装以下Vscode插件：</p>
+<p class="image-container"><img alt="image-20211231113746244" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231113746244.png"></p>
+<p class="image-container"><img alt="image-20211231113912246" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231113912246.png"></p>
+<p>安装完成 Vscode 后在插件栏搜索 <code>Tuya Wind IDE</code> 并进行安装，安装完成后进行账号登录（同涂鸦 IoT 平台账号），如果没有账号，请前往 <a href="https://iot.tuya.com/" target="_blank">涂鸦 IoT 平台</a> 进行账号注册。</p>
+<p class="image-container"><img alt="image-20220411150042599" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220411150042599.png"></p>
+<p>登录完成后，请参考 <code>开发框架</code> 进行接下来的步骤。</p>
+<h3 is-upgraded>开发框架</h3>
+<p>开发框架即开发包</p>
+<h4 is-upgraded>获取</h4>
+<p>在 Vscode 下登录 <code>Tuya Wind IDE</code> 账号，然后选择 <code>创建新框架</code> 进行开发包选择</p>
+<p class="image-container"><img alt="image-20220411150243137" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220411150243137.png"></p>
+<p>选择到合适的开发包后点击确认并开始拉取，拉取完成即可进行相关功能的开发。</p>
+<p class="image-container"><img alt="image-20220411150522556" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220411150522556.png"></p>
+<p>等待开发框架拉取完成</p>
+<p class="image-container"><img alt="image-20220411150607013" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220411150607013.png"></p>
+<h4 is-upgraded>编译</h4>
+<p>找到 Demo 所在目录，在该目录上右键选择 <code>Build Project</code></p>
+<p>注意：编译之前，务必按照本文档和《TuyaOS_BLE_Platform_xxxx》完成所有 &#34;搭建软件环境&#34; 的步骤</p>
+<p class="image-container"><img alt="image-20211229171508492" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229171508492.png"></p>
+<p>手动输入版本号（该版本号即为编译生成的固件版本号，用于授权和OTA）</p>
+<p class="image-container"><img alt="image-20211229171519740" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229171519740.png"></p>
+<p>等待编译成功</p>
+<p class="image-container"><img alt="image-20211231114535344" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231114535344.png"></p>
+<h3 is-upgraded>使用第三方开发工具</h3>
+<p>使用 Keil 等第三方开发工具编译前，必须要使用 Vscode 进行一次编译。</p>
+<p>打开 Keil 等第三方开发工具前，首先关闭Vscode，防止两个软件发生冲突。</p>
+<p>在以下目录找到 Keil  等第三方开发工具的工程文件，打开后可以进行正常的编译和调试。</p>
+<p class="image-container"><img alt="image-20211231144043789" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231144043789.png"></p>
+<h3 is-upgraded>添加文件</h3>
+<p><code>切勿使用Keil进行源文件和头文件的添加操作</code></p>
+<p>在如下目录下添加源文件</p>
+<p class="image-container"><img alt="image-20211231152446129" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231152446129.png"></p>
+<p>在如下目录下添加头文件</p>
+<p class="image-container"><img alt="image-20211231152805277" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231152805277.png"></p>
+<p>源文件/头文件添加完成后，至少使用 Vscode 进行一次代码编译，之后可继续使用 Vscode 或者切换到 Keil 等第三方开发工具进行代码调试工作。</p>
+<h3 is-upgraded>注意</h3>
+<ol type="1">
+<li>第一次编译必须要使用 Vscode 进行编译，脚本会自动构建编译环境，之后你可以打开 IAR 或者 Keil 等第三方开发工具进行调试；</li>
+<li>Vscode 下的脚本会递归遍历 tuyaos_demo_ble_peripheral 文件夹，自动添加该文件下所有的源文件和头文件到编译环境；</li>
+<li>Vscode 在每次编译前都会重新构建编译环境，以下操作要特别注意：</li>
+</ol>
+<ul>
+<li>在使用 IDE 编译的时请关闭 IAR 或者是 Keil 等第三方开发工具，否则可能会导致文件占用的问题；</li>
+<li>在使用 IAR 或者 Keil 等第三方开发工具进行调试的时候，禁止手动添加头文件或者是源文件到工程项目中；</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="开发软件" duration="0">
+        <h2 is-upgraded>软件架构</h2>
+<p class="image-container"><img alt="image-20220418183453214" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220418183453214.png"></p>
+<p>从图中可知，TuyaOS BLE 开发包主要分为两层，第一层称作涂鸦抽象层（tuya abstract layer），该层由各种组件组成，是开发包的主体部分，主要负责涂鸦蓝牙配网、通信、授权、OTA 等功能，其中大部分组件提供源代码，但是安全相关的部分组件仅根据芯片平台提供相应的库文件；第二层称作开发平台，主体由涂鸦提供标准的涂鸦核心层（tuya kernel layer，主要是各种标准头文件），这些头文件对上提供统一的接口，对下适配不同的芯片平台，适配工作可能由涂鸦开发人员完成，也可能由芯片原厂的开发人员完成。</p>
+<p>基于 TuyaOS 开发包，应用开发人员可以进行各种业务开发，例如照明产品、家电产品等。为了方便应用开发人员快速开展工作，涂鸦提供了标准 Demo 工程，标准 Demo 工程无需任何改动，即可直接编译烧录，为应用开发人员提供跨平台的应用开发体验，详见测试章节。同时，应用开发人员可以基于标准 Demo 工程开发自己的产品。</p>
+<h3 is-upgraded>软件运行流程</h3>
+<p class="image-container"><img alt="image-20220418200829687" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220418200829687.png"></p>
+<h2 is-upgraded>开发包目录</h2>
+<p class="image-container"><img alt="image-20220418193704561" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220418193704561.png"></p>
+<h3 is-upgraded>Demo 目录</h3>
+<p class="image-container"><img alt="image-20220418200017207" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220418200017207.png"></p>
+<p>此处展示的 Demo 是 TuyaOS BLE 开发包最基本的 Demo，开发者可以通过该 Demo 体验开发包支持的几乎所有功能，当然也可以基于该 Demo 开发任何产品。</p>
+<h4 is-upgraded>app_config</h4>
+<p>应用信息配置文件，主要包括固件标识名、固件版本、硬件版本、SDK版本等信息。</p>
+<h4 is-upgraded>app_dp_parser</h4>
+<p>DP 点解析例程，包含 DP 点接收函数和发送函数，开发人员可以在接收和发送之间添加业务逻辑。</p>
+<h4 is-upgraded>app_key</h4>
+<p>按键例程，短按进入低功耗，长按恢复出厂设置。</p>
+<h4 is-upgraded>app_led</h4>
+<p>LED 例程。</p>
+<h4 is-upgraded>tuya_ble_protocol_callback</h4>
+<p>主要负责处理涂鸦蓝牙通信协议的事件回调处理以及相关的接口。</p>
+<h4 is-upgraded>tuya_sdk_callback</h4>
+<p>主要负责 TuyaOS SDK 的事件回调处理、各级初始化以及大循环处理。</p>
+<h3 is-upgraded>组件（含库）目录</h3>
+<p class="image-container"><img alt="image-20220418200918641" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220418200918641.png"></p>
+<p class="image-container"><img alt="image-20220418200945813" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220418200945813.png"></p>
+<p>组件是 TuyaOS BLE 开发包的主体部分，TuyaOS的目标就是实现代码的组件化，熟练地掌握常用组件的基本原理和实现方法对于产品开发可以达到事半功倍的效果。</p>
+<h4 is-upgraded>tal_ble_bulkdata</h4>
+<p>实现大数据传输功能。</p>
+<h4 is-upgraded>tal_ble_ota</h4>
+<p>实现OTA功能。</p>
+<h4 is-upgraded>tal_ble_product_test</h4>
+<p>实现授权（产测）功能。</p>
+<h4 is-upgraded>tal_ble_protocol</h4>
+<p>实现涂鸦 BLE 配网协议，内部开发人员请参考《Tuya BLE Communication Protocol》，其他使用人员无需关心实现细节，直接调用相关接口实现业务功能即可。接口介绍详见《<a href="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/tuyaos/%E6%B6%82%E9%B8%A6_ble_sdk_sdk%E8%AF%B4%E6%98%8E_v2_beta1.pdf" target="_blank">涂鸦ble sdk说明</a>》的 <code>API介绍</code> 和 <code>CALL BACK EVENT 介绍</code> 章节，其他内容请忽略 。</p>
+<h4 is-upgraded>tal_ble_uart_common</h4>
+<p>实现串口通用对接功能。</p>
+<h4 is-upgraded>tal_ble_weather</h4>
+<p>实现查询天气功能。</p>
+<h4 is-upgraded>tal_bluetooth</h4>
+<p>实现蓝牙相关接口封装。</p>
+<h4 is-upgraded>tal_driver</h4>
+<p>实现驱动相关接口封装。</p>
+<h4 is-upgraded>tal_key</h4>
+<p>实现按键功能。</p>
+<h4 is-upgraded>tal_oled</h4>
+<p>实现 OLED 屏幕驱动功能。</p>
+<h4 is-upgraded>tal_sdk_test</h4>
+<p>实现测试功能。</p>
+<h4 is-upgraded>tal_system</h4>
+<p>实现系统相关接口封装。</p>
+<h4 is-upgraded>tal_utc</h4>
+<p>实现 UTC 相关接口。</p>
+<h4 is-upgraded>tal_util</h4>
+<p>实现通用工具接口。</p>
+<h4 is-upgraded>tal_ble_mbedtls</h4>
+<p>实现 AES 和 MD5 等加密接口。</p>
+<h4 is-upgraded>tal_ble_secure</h4>
+<p>实现 涂鸦 BLE 配网协议相关的安全接口。</p>
+<h3 is-upgraded>Vender 目录</h3>
+<p class="image-container"><img alt="image-20220419101107254" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220419101107254.png"></p>
+<p>Vender 是开发环境所在目录，包含芯片原厂 SDK、各类适配层以及通用头文件，由涂鸦和芯片原厂共同维护。</p>
+<h4 is-upgraded>芯片原厂 SDK</h4>
+<p>基于芯片原厂的公开例程开发或由芯片原厂开发人员修改而来。</p>
+<h4 is-upgraded>各类适配层</h4>
+<p>涉及蓝牙、外设驱动（GPIO、PWM、ADC、IIC、SPI......）、系统驱动（Memory、OTA、Sleep......）、工具接口的适配。</p>
+<h4 is-upgraded>通用头文件</h4>
+<p>为保证 TKL 层以上能够达到一套代码适用于多个芯片平台的目标，Flash 地址、外设引脚等平台相关的因素都通过统一的宏定义放置于 board.h中。</p>
+<h3 is-upgraded>头文件目录</h3>
+<p class="image-container"><img alt="image-20220419111533203" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220419111533203.png"></p>
+<h4 is-upgraded>tuya_error_code.h</h4>
+<p>涂鸦对错误类型的定义。</p>
+<h4 is-upgraded>tuya_cloud_types.h</h4>
+<p>涂鸦对数据类型、枚举、宏、结构体的定义。</p>
+<h4 is-upgraded>tuya_iot_config</h4>
+<p>涂鸦对系统配置、组件使能/配置的定义。</p>
+<h2 is-upgraded>常用 API</h2>
+<h3 is-upgraded>初始化</h3>
+<p><code>tuya_init_first()</code></p>
+<p>一般用于基础外设、配置信息、内存处理相关的初始化。</p>
+<p><code>tuya_init_second()</code></p>
+<p>一般用于 Log、软定时、蓝牙基础协议相关的初始化。</p>
+<p><code>tuya_init_third()</code></p>
+<p>一般用于复杂外设、外设组件相关的初始化。</p>
+<p><code>tuya_init_last()</code></p>
+<p>一般用于初始化的收尾工作，包含蓝牙配网协议的初始化、测试代码的初始化、开启广播等动作。</p>
+<p>在执行完该 API 之后，一般会进入主循环。</p>
+<p><code>tuya_ble_protocol_init</code></p>
+<p>蓝牙配网协议的初始化。</p>
+<h3 is-upgraded>主循环</h3>
+<p><code>tuya_main_loop()</code></p>
+<p>TuyaOS BLE 开发包基于前后台软件框架，提供了主循环内的回调接口 <code>tuya_main_loop()</code> ，开发者可依据需求自定义相关操作注入该接口。</p>
+<p>注意：</p>
+<p>（1）该接口的返回值会影响低功耗功能，请勿随意修改；</p>
+<p>（2）该接口主要用于开发者添加调试、验证性的操作，需<strong>谨慎使用</strong>。该接口占用过多时间片会影响整个系统框架的稳定性！</p>
+<h3 is-upgraded>事件回调</h3>
+<p><code>tuya_ble_evt_callback</code></p>
+<p>蓝牙基础协议事件回调处理函数，包含协议栈初始化完成、连接、断开、连接参数更新、接收数据等蓝牙基础事件。</p>
+<p><code>tuya_ble_protocol_callback</code></p>
+<p>蓝牙配网协议事件回调处理函数，包含配网成功、时间戳更新成功、接收应用数据、解绑成功、接收OTA数据等应用层常用功能。</p>
+<h3 is-upgraded>数据收发</h3>
+<p><code>TUYA_BLE_CB_EVT_DP_DATA_RECEIVED</code></p>
+<p>应用层数据接收回调，接收的数据符合 DP 数据格式，请参考 <code>DP 点</code> 小节</p>
+<p><code>tuya_ble_dp_data_send</code></p>
+<p>应用层数据发送函数</p>
+<p><code>tuya_ble_dp_data_with_time_send</code></p>
+<p>应用层数据发送函数（带时间戳）</p>
+<p><code>TAL_BLE_EVT_WRITE_REQ</code></p>
+<p>蓝牙基础数据接收回调</p>
+<p><code>tal_ble_server_common_send</code></p>
+<p>蓝牙基础数据发送函数</p>
+<h3 is-upgraded>状态查询</h3>
+<p>tuya_ble_connect_status_get()</p>
+<pre><code language="language-c" class="language-c">typedef enum {
+    UNBONDING_UNCONN = 0,  //未绑定未连接    
+    UNBONDING_CONN,        //未绑定已连接已认证    
+    BONDING_UNCONN,        //已绑定未连接    
+    BONDING_CONN,          //已绑定已连接已认证    
+    BONDING_UNAUTH_CONN,   //已绑定已连接未认证     
+    UNBONDING_UNAUTH_CONN, //未绑定已连接未认证     
+    UNKNOW_STATUS 
+} tuya_ble_connect_status_t;
+</code></pre>
+<p>各状态之间的转换关系如下图所示：</p>
+<p class="image-container"><img alt="image-20220419141240911" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220419141240911.png"></p>
+<h2 is-upgraded>常用功能</h2>
+<h3 is-upgraded>蓝牙数据流</h3>
+<p>下图演示了 BLE 数据在 SDK 中的流转过程，其他过程类似。</p>
+<p class="image-container"><img alt="image-20220419152551810" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220419152551810.png"></p>
+<p>表格形式，方便复制</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>手机发送数据</p>
+</td><td colspan="1" rowspan="1"><p>手机接收数据</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>TKL：芯片原厂 BLE 数据接收回调 + tkl_ble_gatt_evt_func</p>
+</td><td colspan="1" rowspan="1"><p>tkl_ble_gatts_value_notify + 芯片原厂 BLE 数据发送函数</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>TAL：TKL_BLE_GATT_EVT_WRITE_REQ + tal_ble_event_callback</p>
+</td><td colspan="1" rowspan="1"><p>tal_ble_server_common_send</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>TUYA：TAL_BLE_EVT_WRITE_REQ + tuya_ble_gatt_receive_data</p>
+</td><td colspan="1" rowspan="1"><p>tuya_ble_gatt_send_data</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>接收单包：TUYA_BLE_EVT_MTU_DATA_RECEIVE + tuya_ble_handle_ble_data_evt</p>
+</td><td colspan="1" rowspan="1"><p>tuya_ble_gatt_send_data_enqueue + tuya_ble_gatt_send_data_handle</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>tuya_ble_commonData_rx_proc，组包，解密</p>
+</td><td colspan="1" rowspan="1"><p>tuya_ble_commData_send，组包，加密</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>接收指令：TUYA_BLE_EVT_BLE_CMD + tuya_ble_handle_ble_cmd_evt</p>
+</td><td colspan="1" rowspan="1"><p>TUYA_BLE_EVT_DP_DATA_SEND - tuya_ble_handle_dp_data_send_evt</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>tuya_ble_evt_process，指令分发</p>
+</td><td colspan="1" rowspan="1"><p>tuya_ble_dp_data_send</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>FRM_DP_DATA_WRITE_REQ + tuya_ble_handle_dp_data_write_req</p>
+</td><td colspan="1" rowspan="1"><p>app_dp_report</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>TUYA_BLE_CB_EVT_DP_DATA_RECEIVED + app_dp_parser</p>
+</td><td colspan="1" rowspan="1"><p>↑</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>→</p>
+</td><td colspan="1" rowspan="1"><p>→</p>
+</td></tr>
+</table>
+<h3 is-upgraded>测试代码</h3>
+<p>开启测试代码 - 设置宏 TUYA_SDK_TEST 的值为 1。</p>
+<p>关闭测试代码 - 设置宏 TUYA_SDK_TEST 的值为 0。</p>
+<p>测试代码结合测试上位机（Logic）可实现大部分配网、通信、外设等功能的测试，可帮助开发者更好的开发产品，<strong>但是生产固件请务必关闭测试功能。</strong></p>
+<h3 is-upgraded>Log 管理</h3>
+<p class="image-container"><img alt="image-20220624164104619" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220624164104619.png"></p>
+<p><a href="https://docs.qq.com/sheet/DWlJwc2VqdEtkdGxk?u=f2ae378df6814bb9b6be54fc69d58391&tab=BB08J2" target="_blank">上图链接</a>    方便复制</p>
+<p>ENABLE_LOG</p>
+<p>BOARD_LOG_ENABLE</p>
+<h4 is-upgraded>Log 输出接口</h4>
+<p>tuya_log_output_cb</p>
+<h3 is-upgraded>动态内存</h3>
+<p>动态内存的大小：HEAP_SIZE</p>
+<h3 is-upgraded>Flash 管理</h3>
+<h3 is-upgraded>计算固件占用 Flash 和 RAM</h3>
+<p>计算固件占用的 Flash 和 RAM 之前，请首先完成以下几件事：</p>
+<p>（1）关闭测试功能；</p>
+<p>（2）关闭 Log 相关的所有宏；</p>
+<p>（3）关闭不需要的功能，例如扫描等；</p>
+<h3 is-upgraded>关于驱动</h3>
+<p>涂鸦通过 TKL 层提供了最小功能集所需的驱动接口，TKL 只是涂鸦标准化的接口，并非所有驱动都有 TKL，为保证开发效率，没有 TKL 的驱动，开发者可以按照实际需求实现。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="烧录固件" duration="0">
+        <p>烧录固件跟芯片平台完全相关，请参阅《TuyaOS_BLE_Platform_xxxx》文档</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="授权" duration="0">
+        <p>详见《<a href="https://registry.code.tuya-inc.top/document/platform/-/blob/main/_%E6%B1%87%E6%80%BB/04_%E4%BA%A7%E6%B5%8B/TuyaOS_BLE_SDK_Product_Test.md" target="_blank">TuyaOS BLE SDK Product Test</a>》，该文档位于doc文件夹下。</p>
+<p>若暂无生产需要，也可通过以下方式进行临时授权（仅用于调试，生产时请改回原状）：</p>
+<p>（1）将</p>
+<p class="image-container"><img alt="image-20211231144126460" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231144126460.png"></p>
+<p>临时修改为</p>
+<pre><code language="language-c++" class="language-c++">STATIC tuya_ble_device_param_t tuya_ble_protocol_param = {
+    .use_ext_license_key = 1, //1-info in tuya_ble_sdk_demo.h, 0-auth info
+    .device_id_len       = DEVICE_ID_LEN, //DEVICE_ID_LEN,
+    .p_type              = TUYA_BLE_PRODUCT_ID_TYPE_PID,
+    .product_id_len      = 8,
+    .adv_local_name_len  = 4,
+};
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="测试" duration="0">
+        <h3 is-upgraded>体验</h3>
+<p>授权结束后，即成功激活涂鸦BLE设备。</p>
+<p>此时可在App Store下载 <code>涂鸦智能</code> App，登录后 <code>添加设备</code> / 点击 <code>右上角</code> → <code>添加设备</code></p>
+<p class="image-container"><img alt="image-20211231145241481" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231145241481.png"></p>
+<p>设备添加完成后如下图所示：</p>
+<p class="image-container"><img alt="image-20211231145506556" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211231145506556.png"></p>
+<p>此时可通过 <code>涂鸦智能</code> App 控制 BLE 设备。</p>
+<h2 is-upgraded>测试上位机</h2>
+<h3 is-upgraded>使用范围</h3>
+<p>TuyaOS BLE SDK，用于蓝牙协议和外设功能的验证和测试。</p>
+<h3 is-upgraded>获取方式</h3>
+<p><a href="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/logic/logic.exe" target="_blank">下载地址</a></p>
+<p>最新版本请单击 <code>帮助 → 最新版本</code> 获取。</p>
+<h3 is-upgraded>基本信息</h3>
+<p>通信方式：串口</p>
+<p>波特率：默认 9600</p>
+<h3 is-upgraded>使用步骤</h3>
+<p>绿色软件，无需安装，解压至一个<strong>单独文件夹</strong>中双击打开即可。</p>
+<h4 is-upgraded>默认界面</h4>
+<p class="image-container"><img alt="image-20211229172046966" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172046966.png"></p>
+<h4 is-upgraded>串口设置</h4>
+<p>可关闭打开串口设置</p>
+<p>关闭</p>
+<p class="image-container"><img alt="image-20211229172059627" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172059627.png"></p>
+<p>打开</p>
+<p class="image-container"><img alt="image-20211229172109380" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172109380.png"></p>
+<h4 is-upgraded>调试 - 调试信息</h4>
+<p class="image-container"><img alt="image-20220620142233705" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220620142233705.png"></p>
+<p>可关闭打开调试信息（串口指令）</p>
+<p>关闭</p>
+<p class="image-container"><img alt="image-20211229172129374" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172129374.png"></p>
+<p>打开</p>
+<p class="image-container"><img alt="image-20211229172138937" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172138937.png"></p>
+<h4 is-upgraded>设置</h4>
+<p class="image-container"><img alt="image-20211229172147784" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172147784.png"></p>
+<p>恢复出厂设置：对设备发送恢复出厂设置的命令</p>
+<p>打开声音：打开声音，进行必要的声音提示</p>
+<p>显示行数：前台Log的最大显示行数</p>
+<p>定时发送时间：指令定时发送时间，单位ms</p>
+<h4 is-upgraded>帮助</h4>
+<p class="image-container"><img alt="image-20211229172158480" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172158480.png"></p>
+<p>TuyaOS@无线二：了解TuyaOS</p>
+<p>最新版本：获取最新版本</p>
+<h2 is-upgraded>重点功能测试说明</h2>
+<h3 is-upgraded>大数据</h3>
+<p>第一步：设置PID</p>
+<p>当前设置 PID 的功能仅用于大数据测试，设置 PID 之前，如果设备处于绑定状态，需要先解除绑定，清空 App 缓存，并重启 App 进行设备发现。</p>
+<p class="image-container"><img alt="image-20211229172225639" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172225639.png"></p>
+<p>第二步：设置大数据</p>
+<p>通过修改下图中的十六进制数据可以修改上报的步数</p>
+<p class="image-container"><img alt="image-20211229172234923" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172234923.png"></p>
+<p>设置大数据成功后，在 App 产品面板首页下拉刷新，等待大数据同步成功，即可在产品面板第二页 &#34;步数&#34; 一栏看到上报的步数。</p>
+<h3 is-upgraded>天气数据</h3>
+<p>位置：</p>
+<p>1-配网位置</p>
+<p>2-当前位置（手机）</p>
+<p>天气参数：</p>
+<p>(1 « 0), /**&lt; temperature. */</p>
+<p>(1 « 1), /**&lt; high temperature. */</p>
+<p>(1 « 2), /**&lt; low temperature. */</p>
+<p>(1 « 3), /**&lt; humidity. */</p>
+<p>(1 « 4), /**&lt; weather condition. */</p>
+<p>(1 « 5), /**&lt; pressure. */</p>
+<p>(1 « 6), /**&lt; sendible temperature. */</p>
+<p>(1 « 7), /**&lt; uvi. */</p>
+<p>(1 « 8), /**&lt; sunrise. */</p>
+<p>(1 « 9), /**&lt; sunset. */</p>
+<p>(1 « 10), /**&lt; unix time, Use with sunrise and sunset. */</p>
+<p>(1 « 11), /**&lt; local time, Use with sunrise and sunset. */</p>
+<p>(1 « 12), /**&lt; wind speed. */</p>
+<p>(1 « 13), /**&lt; wind direction. */</p>
+<p>(1 « 14), /**&lt; wind speed scale/level. */</p>
+<p>(1 « 15), /**&lt; aqi. */</p>
+<p>(1 « 16), /**&lt; tips. */</p>
+<p>(1 « 17), /**&lt; Detailed AQI status and national ranking. */</p>
+<p>(1 « 18), /**&lt; pm10. */</p>
+<p>(1 « 19), /**&lt; pm2.5. */</p>
+<p>(1 « 20), /**&lt; o3. */</p>
+<p>(1 « 21), /**&lt; no2. */</p>
+<p>(1 « 22), /**&lt; co. */</p>
+<p>(1 « 23), /**&lt; so2. */</p>
+<p>(1 « 24), /**&lt; weather condition mapping id. */</p>
+<p>某天：</p>
+<p>1-7</p>
+<h3 is-upgraded>出厂设置</h3>
+<p>App端解绑并清除数据——虚拟ID改变</p>
+<p>App仅解绑——虚拟ID不改变</p>
+<p>本地解绑并清除数据——虚拟ID不改变</p>
+<p>本地仅解绑——虚拟ID不改变</p>
+<h3 is-upgraded>扫描功能</h3>
+<p>如果设备支持扫描功能，可以使用上位机测试，测试方法如下：</p>
+<p class="image-container"><img alt="image-20220620114908663" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20220620114908663.png"></p>
+<p>开启扫描功能后，要多测试是否会对其他功能产生影响</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="OTA" duration="0">
+        <h2 is-upgraded>协议</h2>
+<p>参考《Tuya BLE Communication Protocol》中 8.13~8.18 小节。</p>
+<h2 is-upgraded>流程</h2>
+<p class="image-container"><img alt="image-20211229172319849" src="https://myphotos-1257188211.cos.ap-shanghai.myqcloud.com/img/image-20211229172319849.png"></p>
+<h2 is-upgraded>特点</h2>
+<p>支持双分区</p>
+<p>支持断点续传</p>
+<h2 is-upgraded>相关代码</h2>
+<h3 is-upgraded>API</h3>
+<p>tal_ble_protocol</p>
+<p>tal_ble_ota</p>
+<h3 is-upgraded>Event</h3>
+<p>TUYA_BLE_CB_EVT_OTA_DATA</p>
+<h3 is-upgraded>MACRO</h3>
+<p>#define BOARD_FLASH_OTA_START_ADDR       (0x46000)</p>
+<p>#define BOARD_FLASH_OTA_END_ADDR           (0x66000)</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="默认参数" duration="0">
+        <h2 is-upgraded>串口参数</h2>
+<p>串口号：UART0（此处指代TAL层的UART0，具体引脚请参考硬件说明）</p>
+<p>波特率：9600</p>
+<p>最大数据长度：≥ 200字节</p>
+<h2 is-upgraded>蓝牙参数</h2>
+<p>默认广播间隔：100ms</p>
+<p>默认连接间隔：180 ~ 200ms，</p>
+<p>OTA连接间隔：15ms</p>
+<p>默认连接超时：6000ms</p>
+<p>默认MTU ：247</p>
+<h2 is-upgraded>通信距离</h2>
+<p>室内无遮挡无干扰：≥15m</p>
+<p>室外无遮挡无干扰：≥30m</p>
+<h2 is-upgraded>OTA时间</h2>
+<p>不低于60s/100kB</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="注意事项" duration="0">
+        <p>外设引脚复用之前务必恢复初始状态</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+
+  <script src="https://images.tuyacn.com/smart/embed/package/vscode/tool-claat/js/native-shim.js"></script>
+  <script src="https://images.tuyacn.com/smart/embed/package/vscode/tool-claat/js/custom-elements.min.js"></script>
+  <script src="https://images.tuyacn.com/smart/embed/package/vscode/tool-claat/js/prettify.js"></script>
+  <script src="https://images.tuyacn.com/smart/embed/package/vscode/tool-claat/js/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

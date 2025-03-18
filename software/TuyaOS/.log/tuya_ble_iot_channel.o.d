@@ -1,0 +1,30 @@
+.log/tuya_ble_iot_channel.o: \
+ components/tal_ble_iot_channel/src/tuya_ble_iot_channel.c \
+ components/tal_ble_protocol/include/tuya_ble_api.h \
+ include/vendor/adapter/utilities/include/tuya_cloud_types.h \
+ include/base/include/tuya_iot_config.h \
+ apps/tuyaos_ble_file_demo/app_config.h \
+ vendor/tlsr825x_ble/sdk/telink_sdk/common/stdint.h \
+ vendor/tlsr825x_ble/sdk/telink_sdk/common/string.h \
+ include/base/include/tuya_error_code.h \
+ components/tal_ble_protocol/include/tuya_ble_type.h \
+ components/tal_ble_protocol/include/tuya_ble_internal_config.h \
+ components/tal_ble_protocol/include/tuya_ble_config.h \
+ components/tal_ble_protocol/include/custom_tuya_ble_config.h \
+ vendor/tlsr825x_ble/tuyaos/include/board.h \
+ components/tal_system/include/tal_log.h \
+ components/tal_ble_protocol/include/tuya_ble_port.h \
+ include/vendor/adapter/system/include/tkl_system.h \
+ include/components/tal_ble_mbedtls/include/tal_ble_md5.h \
+ components/tal_ble_ota/include/tuya_ble_ota.h \
+ components/tal_ble_protocol/include/tuya_ble_type.h \
+ components/tal_ble_protocol/include/tuya_ble_main.h \
+ components/tal_ble_protocol/include/tuya_ble_data_handler.h \
+ components/tal_ble_protocol/include/tuya_ble_mutli_tsf_protocol.h \
+ include/components/tal_ble_secure/include/tuya_ble_secure.h \
+ components/tal_ble_protocol/include/tuya_ble_internal_config.h \
+ components/tal_ble_protocol/include/tuya_ble_mem.h \
+ components/tal_ble_protocol/include/tuya_ble_log.h \
+ components/tal_ble_protocol/include/custom_tuya_ble_config.h \
+ components/tal_ble_iot_channel/include/tuya_ble_iot_channel.h \
+ components/tal_ble_scene/include/tuya_ble_scene.h
