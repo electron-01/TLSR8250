@@ -1,0 +1,12 @@
+{
+    "OsVersion": "3.10.0",
+    "SDKType": "1",
+    "package": {
+        "MainPackage": {
+            "Name": "tuyaos-subdev-bt_3.10.0_tlsr825x_ble_ble-common_0.0.13.tar.gz"
+        },
+        "Packages": []
+    },
+    "toolchain_pack_url": "https://airtake-public-data-1254153901.cos.ap-shanghai.myqcloud.com/smart/embed/pruduct/tlsr825x_ble_0.0.13.zip",
+    "AblityValue": {}
+}

@@ -1,6 +1,2 @@
-# tlsr825x
-# tuyaos_demo_mesh_node
-//test
-//create
-//new
+# tlsr8250_ble
 

@@ -1,0 +1,39 @@
+{
+    "SDKType": "1",
+    "bv": "40.00",
+    "chipInfoList": [
+        "wireless SoC/Telink/Bluetooth/TLSR8250"
+    ],
+    "feature": "https://images.tuyacn.com/smart/sdk/c05826b075ab65c1075ef4ab9a73bdc69500618f.json",
+    "offShelfReasonCN": "",
+    "offShelfReasonEN": "",
+    "sdkDescCN": "1、提升所有平台的OTA速度（可达到10KB/s）。\n2、支持最新的GPIO测试功能。\n3、优化4.x协议相关的配网功能。\n4、优化OLED组件的显示功能。\n5、支持应用层自主配置离线解绑功能。\n6、支持配置夏令时功能。\n7、TLSR825x ram资源占用优化。",
+    "sdkDescEN": "1. Improve the OTA speed of all platforms(can reach 10KB/s).\n2. Support the latest GPIO test function.\n3. Optimize bonding functions related to 4.x protocol.\n4. Optimize the display function of OLED components.\n5. Support setting offline unbinding function of the application layer.\n6. Support configuring the DST function.\n12. TLSR825x ram resource utilization optimization.",
+    "sdkId": 156002,
+    "sdkName": "tuyaos-subdev-bt-tlsr825x_ble-ble-common",
+    "sdkVerDescCN": "TuyaOS BLE SDK For TLSR8250 3.10.0",
+    "sdkVerDescEN": "TuyaOS BLE SDK For TLSR8250 3.10.0",
+    "sdkVersion": "3.10.0",
+    "sdkVersionFileSize": "106498907",
+    "sdkVersionMd5": "583efaf03c147f9bfc1bb8d115ce5157",
+    "sdkVersionOffShelf": false,
+    "tuyaosVersion": "TuyaOS-3.10.0",
+    "typeCode": "EmbeddedPackage-SubDevice:Ble",
+    "typeNameCN": "子设备开发:蓝牙设备开发包",
+    "typeNameEN": "Sub-Device Development:Bluetooth Device Development Kit",
+    "quickStartDemoName": "",
+    "quickStartDemoAddr": "",
+    "typeDemoName": [],
+    "typeDemoAddr": [],
+    "package": {
+        "MainPackage": {
+            "Name": "tuyaos-subdev-bt_3.10.0_tlsr825x_ble_ble-common_0.0.13.tar.gz"
+        },
+        "Packages": [],
+        "CurrentPackage": {
+            "Name": "tuyaos-subdev-bt_3.10.0_tlsr825x_ble_ble-common_0.0.13.tar.gz"
+        }
+    },
+    "sdkVersionId": "389013",
+    "id": 156002
+}
